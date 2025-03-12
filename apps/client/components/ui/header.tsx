@@ -3,6 +3,8 @@
 import { motion } from "motion/react";
 import Button from "./button";
 import { FaShapes } from "react-icons/fa6";
+import Link from "next/link";
+import Logo from "./Logo";
 
 export default function Header() {
   return (
@@ -15,14 +17,12 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <motion.div
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 cursor-pointer"
             whileHover={{ scale: 1.05 }}
           >
-            <FaShapes className="w-8 h-8 text-indigo-600" />
-            <span className="text-2xl font-caveat font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              DrawFlow
-            </span>
+            <Logo />
           </motion.div>
+
           <nav className="hidden md:flex items-center space-x-8">
             {["Features", "Pricing", "Testimonials"].map((item) => (
               <motion.a
@@ -36,8 +36,12 @@ export default function Header() {
             ))}
           </nav>
           <div className="flex items-center gap-4">
-            <Button label="Login" variant="ghost" size="sm" />
-            <Button variant="primary" size="sm" label="Get Started" />
+            <Link href="/login">
+              <Button label="Login" variant="ghost" size="sm" />
+            </Link>
+            <Link href="/signup">
+              <Button variant="primary" size="sm" label="Get Started" />
+            </Link>
           </div>
         </div>
       </div>

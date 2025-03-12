@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import Button from "./button";
 import { FaUsers } from "react-icons/fa";
 import { BiShare } from "react-icons/bi";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -38,7 +39,9 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.5 }}
           >
-            <Button variant="primary" size="lg" label="Start Drawing Now" />
+            <Link href="login">
+              <Button variant="primary" size="lg" label="Start Drawing Now" />
+            </Link>
           </motion.div>
         </motion.div>
 

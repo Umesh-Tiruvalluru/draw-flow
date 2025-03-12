@@ -97,6 +97,21 @@ app.post("/room", auth, async (req, res) => {
   }
 });
 
+app.get("/rooms", auth, async (req, res) => {
+  //@ts-ignore
+  const userId = req.userId;
+
+  try {
+    const rooms = await prismaClient.room.findMany({
+      where: { adminId: userId },
+    });
+
+    res.send({ rooms });
+  } catch (e) {
+    res.status(411).json({ message: e });
+  }
+});
+
 app.get("/shapes/:roomId", async (req, res) => {
   const roomId = Number(req.params.roomId);
   try {

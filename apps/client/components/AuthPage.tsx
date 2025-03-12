@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/button";
 import { login } from "@/service";
-import Redirect from "./Redirect";
 
 interface AuthPageProps {
   isLogin: boolean;
@@ -25,6 +24,15 @@ export default function AuthPage({ isLogin }: AuthPageProps) {
   });
   const [error, setError] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("auth-token="))
+      ?.split("=")[1];
+
+    if (token) router.push("/dashboard"); // Redirect if already logged in
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

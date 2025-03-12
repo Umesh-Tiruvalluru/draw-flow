@@ -8,9 +8,12 @@ export default function RoomCanvas({ roomId }: { roomId: string }) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
-    const ws = new WebSocket(
-      "ws://localhost:8080?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMyOTYwZTY3LTM4YWUtNGFiYS04YWYwLTBhOWQ3YWY4YzVlNCIsImlhdCI6MTczOTc3MTQ5NX0.69X1dN4VVzV868OUf8Xtdr8rIfGqyMEyO9ge3vJ3VJ4",
-    );
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("auth-token="))
+      ?.split("=")[1];
+
+    const ws = new WebSocket(`ws://localhost:8080?token=${token}`);
 
     ws.onopen = () => {
       setSocket(ws);

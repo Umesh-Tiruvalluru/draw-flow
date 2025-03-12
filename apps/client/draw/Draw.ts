@@ -30,7 +30,6 @@ export class Draw {
     this.init();
     this.initHandlers();
     this.initMouseHandlers();
-    this.initPanningHandlers();
   }
 
   async init() {
@@ -67,10 +66,19 @@ export class Draw {
   }
 
   clearCanvas() {
+    this.ctx.setTransform(1, 0, 0, 1, 0, 0);
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.setTransform(
+      this.viewPortTransform.scale,
+      0,
+      0,
+      this.viewPortTransform.scale,
+      this.viewPortTransform.x,
+      this.viewPortTransform.y,
+    );
+
     this.ctx.fillStyle = "rgba(0, 0, 0)";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
     for (const element of this.existingElements) {
       if (element.type === "RECT") {
         this.ctx.strokeStyle = "rgba(255, 255, 255)"; //blah
@@ -103,16 +111,6 @@ export class Draw {
     this.clicked = true;
     this.startX = event.clientX;
     this.startY = event.clientY;
-
-    // const selectedTool = this.selectedTool;
-
-    // if (selectedTool === "PAN") {
-    //   this.canvas.addEventListener("mousemove", (event) => {
-    //     this.clearCanvas();
-    //     console.log("Hey Dumb");
-    //     this.updatePanning(event);
-    //   });
-    // }
   };
 
   updatePanning = (event: MouseEvent) => {
@@ -125,6 +123,31 @@ export class Draw {
     this.startX = localX;
     this.startY = localY;
   };
+
+  onPanning = (event: MouseEvent) => {
+    this.clearCanvas();
+    this.updatePanning(event);
+  };
+
+  initPanning() {
+    const selectedTool = this.selectedTool;
+    console.log(this.selectedTool);
+    console.log(this.viewPortTransform);
+    console.log(selectedTool === "PAN");
+    if (selectedTool === "PAN") {
+      console.log(this.viewPortTransform);
+      this.canvas.addEventListener("mousedown", (event) => {
+        this.startX = event.clientX;
+        this.startY = event.clientY;
+
+        this.canvas.addEventListener("mousemove", this.onPanning);
+      });
+
+      this.canvas.addEventListener("mouseup", () => {
+        this.canvas.removeEventListener("mousemove", this.onPanning);
+      });
+    }
+  }
 
   mouseUpHandler = (event: MouseEvent) => {
     this.clicked = false;
@@ -196,30 +219,10 @@ export class Draw {
     }
   };
 
-  initPanningHandlers() {
-    if (this.selectedTool === "PAN") {
-      this.canvas.addEventListener("mousedown", (event) => {
-        this.startX = event.clientX;
-        this.startY = event.clientY;
-
-        this.canvas.addEventListener("mousemove", (event) => {
-          this.clearCanvas();
-
-          this.updatePanning(event);
-        });
-      });
-
-      this.canvas.addEventListener("mouseup", () => {
-        this.canvas.removeEventListener("mousedown", () => {
-          this.clearCanvas();
-        });
-      });
-    }
-  }
-
   initMouseHandlers() {
     this.canvas.addEventListener("mouseup", this.mouseUpHandler);
     this.canvas.addEventListener("mousedown", this.mouseDownHandler);
     this.canvas.addEventListener("mousemove", this.mouseMoveHandler);
+    this.initPanning();
   }
 }

@@ -17,15 +17,19 @@ export default function Canvas({
   const [selectedTool, setSelectedTool] = useState<Tool>("RECT");
 
   useEffect(() => {
+    draw?.setTool(selectedTool);
+  }, [selectedTool, draw]);
+
+  useEffect(() => {
     if (canvasRef.current) {
       const initDraw = new Draw(canvasRef.current, socket, roomId);
       setDraw(initDraw);
+
+      return () => {
+        initDraw.destroy();
+      };
     }
   }, [canvasRef, socket, roomId, selectedTool]);
-
-  useEffect(() => {
-    draw?.setTool(selectedTool);
-  }, [selectedTool, draw]);
 
   return (
     <div className="relative">

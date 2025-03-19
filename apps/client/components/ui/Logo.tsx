@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { FaShapes } from "react-icons/fa6";
+// import { FaShapes } from "react-icons/fa6";
 
 export default function Logo() {
   return (

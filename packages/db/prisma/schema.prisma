@@ -30,12 +30,14 @@ model User {
 }
 
 model Room {
-  id         Int        @id @default(autoincrement())
-  slug       String     @unique
-  created_at DateTime   @default(now())
-  adminId    String
-  admin      User       @relation(fields: [adminId], references: [id])
-  Elements   Elements[]
+  id          Int        @id @default(autoincrement())
+  slug        String
+  imageId     Int
+  isFavourite Boolean    @default(false)
+  created_at  DateTime   @default(now())
+  adminId     String
+  admin       User       @relation(fields: [adminId], references: [id])
+  Elements    Elements[]
 }
 
 model Elements {

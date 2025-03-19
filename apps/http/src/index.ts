@@ -75,23 +75,21 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/room", auth, async (req, res) => {
-  const data = RoomSchema.safeParse(req.body);
-
-  if (!data.success) {
-    res.json({ message: "Incorrect Inputs" });
-  }
+  const slug = req.body.slug;
 
   //@ts-ignore
   const userId = req.userId;
+  console.log(userId);
   try {
     const room = await prismaClient.room.create({
       data: {
-        slug: data.data?.slug || "",
+        slug: slug,
         adminId: userId,
+        imageId: Math.floor(Math.random() * 10),
       },
     });
 
-    res.json({ roomId: room?.id });
+    res.json({ room });
   } catch (e) {
     res.status(411).json({ message: "Room already exists with the name" });
   }

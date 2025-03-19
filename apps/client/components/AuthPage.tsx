@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Button from "./ui/button";
-import { login } from "@/service";
+import { login, signUp } from "@/service";
 
 interface AuthPageProps {
   isLogin: boolean;
@@ -70,6 +70,16 @@ export default function AuthPage({ isLogin }: AuthPageProps) {
           throw new Error("Please enter your full name");
         }
         // Add signup logic here
+        const response = await signUp(
+          formData.fullName,
+          formData.email,
+          formData.password,
+        );
+        console.log(response);
+
+        if (response.statusText === "OK") {
+          router.push("/login");
+        }
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "An error occurred");

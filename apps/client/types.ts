@@ -14,3 +14,7 @@ export type ElementType =
     };
 
 export type Tool = "RECT" | "CIRCLE" | "LINE" | "PENCIL" | "PAN";
+
+export type room = {
+  id: number;
+};

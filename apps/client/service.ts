@@ -51,3 +51,20 @@ export async function getRooms() {
 
   return response.data;
 }
+
+export async function addRoom(slug: string) {
+  const token = document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("auth-token="))
+    ?.split("=")[1];
+
+  const response = axios.post(
+    `${HTTP_BACKEND}/room`,
+    {
+      slug: slug,
+    },
+    { headers: { Authorization: token } },
+  );
+
+  return response;
+}

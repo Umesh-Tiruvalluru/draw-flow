@@ -1,6 +1,6 @@
 import { BiCircle, BiPencil, BiRectangle } from "react-icons/bi";
 import { TfiLayoutLineSolid } from "react-icons/tfi";
-import IconButton from "./IconButton";
+import IconButton from "@/components/ui/IconButton";
 import { Tool } from "@/types";
 import { FaHand } from "react-icons/fa6";
 

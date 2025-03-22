@@ -70,7 +70,7 @@ wss.on("connection", (ws, req) => {
     if (parsedData.roomAction === "join_room") {
       const user = users.find((usr) => usr.ws === ws);
       user?.rooms.push(parsedData.roomId);
-      ws.send("Joined Successfully");
+      ws.send(JSON.stringify({ message: "Joined Successfully" }));
     }
 
     // {roomAction, room}
@@ -80,14 +80,9 @@ wss.on("connection", (ws, req) => {
       user.rooms = user?.rooms.filter((room) => room === parsedData.room);
     }
 
-    // {roomAction, shapeData: {type, x, y, width, height}, roomId}
     if (parsedData.roomAction === "draw") {
-      // const { type, x, y, width, height } = JSON.parse(parsedData.shapeData);
-      //
       const elementData = JSON.parse(parsedData.elementData);
-
       let data;
-
       if (elementData.type === "RECT") {
         data = {
           x: Number(elementData.x),
@@ -115,6 +110,8 @@ wss.on("connection", (ws, req) => {
           text: elementData.text,
           maxWidth: Number(elementData.maxWidth),
         };
+      } else if (elementData.type === "PENCIL") {
+        console.log(elementData.points);
       }
 
       if (!data) return;

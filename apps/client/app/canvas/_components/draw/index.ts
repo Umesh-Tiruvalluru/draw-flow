@@ -115,12 +115,30 @@ export class Draw {
     this.ctx.closePath();
   }
 
+  drawWithPencil(element: Extract<ElementType, { type: "PENCIL" }>) {
+    this.ctx.beginPath();
+    this.ctx.strokeStyle = "rgba(255, 255, 255)";
+    this.ctx.lineWidth = 2;
+    this.ctx.lineCap = "round";
+    this.ctx.lineJoin = "round";
+
+    if (element.points.length > 0) {
+      this.ctx.moveTo(element.points[0].x, element.points[0].y);
+    }
+
+    for (let i = 1; i < element.points.length; i++) {
+      this.ctx.moveTo(element.points[i].x, element.points[i].y);
+    }
+
+    this.ctx.stroke();
+    this.ctx.closePath();
+  }
+
   mouseDownHandler = (event: MouseEvent) => {
     //Mouse down event
     this.clicked = true;
     this.startX = event.offsetX;
     this.startY = event.offsetY;
-    console.log("Mouse Down");
   };
 
   mouseUpHandler = (event: MouseEvent) => {

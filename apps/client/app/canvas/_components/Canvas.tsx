@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 
-import Topbar from "./ui/Topbar";
-import { Draw } from "@/draw/Draw";
+import Topbar from "./Topbar";
+
 import { Tool } from "@/types";
+import { Draw } from "./draw";
 
 export default function Canvas({
   roomId,

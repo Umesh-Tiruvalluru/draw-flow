@@ -24,7 +24,7 @@ export type ElementType =
       points: ElementPointsType[];
     };
 
-type ElementPointsType = {
+export type ElementPointsType = {
   x: number;
   y: number;
 };

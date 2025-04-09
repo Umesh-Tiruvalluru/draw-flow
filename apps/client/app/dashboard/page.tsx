@@ -82,7 +82,7 @@ export default function DashboardPage() {
             key={room.id}
             id={room.id}
             slug={room.slug}
-            isFavourite={true}
+            isFavourite={room.isFavouriteq}
             created_at={room.created_at}
             imageId={room.imageId}
           />

@@ -4,7 +4,7 @@ interface ButtonProps {
   label: string;
   className?: string;
   onClick?: () => void;
-  variant: "primary" | "outline" | "ghost";
+  variant: "primary" | "outline" | "ghost" | "destructive";
   size: "sm" | "md" | "lg";
   icon?: SVGElement;
 }
@@ -23,6 +23,8 @@ export default function Button({
     outline:
       "border-2 border-zinc-900 hover:bg-zinc-900 text-black hover:text-white transistion-all duration-300 rounded-full font-semibold",
     ghost: "text-black font-medium ",
+    destructive:
+      "bg-red-700 hover:bg-red-800 text-white font-semibold rounded-lg",
   };
 
   const sizeStyles = {

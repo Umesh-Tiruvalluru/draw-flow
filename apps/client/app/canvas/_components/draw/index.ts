@@ -1,5 +1,5 @@
 import { getExistingShapes } from "@/service";
-import { ElementType, Tool } from "@/types";
+import { ElementPointsType, ElementType, Tool } from "@/types";
 
 export class Draw {
   private canvas: HTMLCanvasElement;
@@ -11,6 +11,8 @@ export class Draw {
   private clicked: boolean;
   private startX: number = 0;
   private startY: number = 0;
+
+  private points: ElementPointsType[] = [];
 
   private viewPortTransform = {
     x: 0,
@@ -35,6 +37,7 @@ export class Draw {
 
   async init() {
     this.existingElements = await getExistingShapes(this.roomId);
+    console.log(this.existingElements);
     this.clearCanvas();
   }
 
@@ -87,6 +90,8 @@ export class Draw {
         this.drawCircle(element);
       } else if (element.type === "LINE") {
         this.drawLine(element);
+      } else if (element.type === "PENCIL") {
+        this.drawWithPencil(element);
       }
     }
   }
@@ -116,18 +121,18 @@ export class Draw {
   }
 
   drawWithPencil(element: Extract<ElementType, { type: "PENCIL" }>) {
+    if (element.points.length < 2) return;
+
     this.ctx.beginPath();
     this.ctx.strokeStyle = "rgba(255, 255, 255)";
     this.ctx.lineWidth = 2;
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
 
-    if (element.points.length > 0) {
-      this.ctx.moveTo(element.points[0].x, element.points[0].y);
-    }
+    this.ctx.moveTo(element.points[0].x, element.points[0].y);
 
     for (let i = 1; i < element.points.length; i++) {
-      this.ctx.moveTo(element.points[i].x, element.points[i].y);
+      this.ctx.lineTo(element.points[i].x, element.points[i].y);
     }
 
     this.ctx.stroke();
@@ -179,6 +184,12 @@ export class Draw {
         endX: endX,
         endY: endY,
       };
+    } else if (this.selectedTool === "PENCIL") {
+      element = {
+        type: "PENCIL",
+        points: this.points,
+      };
+      this.points = [];
     }
 
     console.log(element);
@@ -230,6 +241,12 @@ export class Draw {
           startY: this.startY,
           endX,
           endY,
+        });
+      } else if (this.selectedTool === "PENCIL") {
+        this.points.push({ x: event.offsetX, y: event.offsetY });
+        this.drawWithPencil({
+          type: "PENCIL",
+          points: this.points,
         });
       }
     }

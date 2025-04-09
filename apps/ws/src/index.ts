@@ -111,7 +111,7 @@ wss.on("connection", (ws, req) => {
           maxWidth: Number(elementData.maxWidth),
         };
       } else if (elementData.type === "PENCIL") {
-        console.log(elementData.points);
+        data = { points: elementData.points };
       }
 
       if (!data) return;

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { HTTP_BACKEND } from "./config";
 import { Content } from "next/font/google";
+import { headers } from "next/headers";
 
 export async function getExistingShapes(roomId: string) {
   const response = await axios.get(`${HTTP_BACKEND}/shapes/${roomId}`);
@@ -32,6 +33,8 @@ export async function login(email: string, password: string) {
     email,
     password,
   });
+
+  console.log(response.data.token);
 
   document.cookie = `auth-token=${response.data.token}; path=/;`;
 
@@ -67,4 +70,26 @@ export async function addRoom(slug: string) {
   );
 
   return response;
+}
+
+export async function deleteBoard(id: number) {
+  try {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("auth-token="))
+      ?.split("=")[1];
+
+    if (!token) {
+      throw new Error("Authentication token not found");
+    }
+
+    const response = await axios.delete(`${HTTP_BACKEND}/room/${id}`, {
+      headers: { Authorization: token },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Failed to delete board:", error);
+    throw error;
+  }
 }

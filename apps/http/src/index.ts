@@ -124,4 +124,16 @@ app.get("/shapes/:roomId", async (req, res) => {
   }
 });
 
+app.delete("/room/:id", auth, async (req, res) => {
+  const roomId = Number(req.params.id);
+
+  try {
+    await prismaClient.room.delete({ where: { id: roomId } });
+
+    res.json({ message: "successfully deleted" });
+  } catch (e) {
+    res.json({ error: e });
+  }
+});
+
 app.listen(8081);

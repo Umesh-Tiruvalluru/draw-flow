@@ -17,6 +17,7 @@ enum ElementType {
   RECT
   CIRCLE
   LINE
+  PENCIL
 }
 
 model User {
@@ -46,6 +47,6 @@ model Elements {
   data   Json
   roomId Int
   userId String
-  room   Room        @relation(fields: [roomId], references: [id])
+  room   Room        @relation(fields: [roomId], references: [id], onDelete: Cascade)
   user   User        @relation(fields: [userId], references: [id])
 }
